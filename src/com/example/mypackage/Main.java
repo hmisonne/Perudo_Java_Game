@@ -1,15 +1,49 @@
 package com.example.mypackage;
 
-import javax.sound.midi.Soundbank;
-import java.sql.SQLOutput;
+import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
-        play();
+        try{
+            play();
+        } catch (NoSuchElementException e){
+            System.out.println(e.toString());
+            System.out.println("Unable to perform operation, shutting down game");
+        }
 
+    }
+    private static int getInt(int lowerBound, int upperBound) {
+        Scanner scanner = new Scanner(System.in);
+        while (true){
+            try {
+                int input;
+                while (true) {
+                    input = scanner.nextInt();
+                    if(input <= upperBound && input >= lowerBound)
+                        break;
+                    System.out.println("Please enter a number between "+lowerBound+" and "+upperBound);
+                }
+                return input;
+            } catch (InputMismatchException e){
+                scanner.nextLine();
+                System.out.println("Please enter a number between "+lowerBound+" and "+upperBound);
+            }
+        }
+    }
+    private static int getInt() {
+        Scanner scanner = new Scanner(System.in);
+        while (true){
+            try {
+                return scanner.nextInt();
+            } catch (InputMismatchException e){
+                scanner.nextLine();
+                System.out.println("Please enter a number");
+            }
+        }
     }
     public static void play() {
 //        Initialize Game
@@ -17,11 +51,13 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 //        Add players
         System.out.println("Enter number of players: ");
-        int playerNumber = scanner.nextInt();
+        int playerNumber = getInt(2,6);
+
         for (int i =0; i<playerNumber; i++){
             System.out.println("Enter player #"+(i+1)+ " name:");
             String playerName = scanner.next();
             Player player = new Player(playerName);
+
             perudo.addPlayer(player);
             scanner.nextLine();
         }
@@ -56,9 +92,9 @@ public class Main {
                     break;
                 case 1:
                     System.out.print("Enter your bet for number of dice: ");
-                    int numOfDice = scanner.nextInt();
+                    int numOfDice = getInt();
                     System.out.print("Enter your bet for value of dice: ");
-                    int dieValue = scanner.nextInt();
+                    int dieValue = getInt(1,6);
                     perudo.makeABet(new int[]{numOfDice, dieValue});
                     break;
                 case 2:
