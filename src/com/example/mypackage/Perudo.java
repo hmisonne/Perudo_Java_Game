@@ -1,20 +1,44 @@
 package com.example.mypackage;
 
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 public class Perudo {
     private ArrayList<Player> players;
     private int[] currentBet;
-    private Player previousPlayer;
     private Player currentPlayer;
-    private boolean isfirstRound = true;
+    private boolean isfirstRound;
+    private boolean isRunning;
+    private boolean currentBetIsCorrect;
+
 
     public Perudo() {
         this.players = new ArrayList<>();
+        this.isfirstRound = true;
+        this.isRunning = true;
+    }
+    public boolean currentBetIsCorrect() {
+        return currentBetIsCorrect;
+    }
+
+    public boolean isRunning() {
+        return isRunning;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(int playerIndex) {
+        this.currentPlayer = players.get(playerIndex);
+    }
+
+    public boolean isfirstRound() {
+        return isfirstRound;
     }
 
     public void addPlayer(Player player){
-         players.add(player);
+        players.add(player);
     }
 
     public void shuffleDice(){
@@ -22,18 +46,42 @@ public class Perudo {
            player.shuffleDice();
         }
     }
+    public Player getPreviousPlayer(){
+        int playerIndex = players.indexOf(currentPlayer);
+        int previousPlayerIndex;
+        if (playerIndex == 0){
+            previousPlayerIndex = players.size() -1 ;
+        } else {
+            previousPlayerIndex = playerIndex - 1;
+        }
+        return players.get(previousPlayerIndex);
+    }
 
-    public void makeABet(int[] currentBet, Player player){
+    public void nextPlayer(){
+        int playerIndex = players.indexOf(currentPlayer);
+        int nextPlayerIndex;
+//        If end of the list, go back to first player
+        if (players.size() == (playerIndex + 1)){
+            nextPlayerIndex = 0;
+        } else {
+            nextPlayerIndex = playerIndex + 1;
+        }
+        this.currentPlayer = players.get(nextPlayerIndex);
+    }
+
+    public void makeABet(int[] currentBet){
 
         int newBetNumOfDice = currentBet[0];
         int newBetDieValue = currentBet[1];
-        System.out.println(player.getName()+ " is betting "+newBetNumOfDice+" "+newBetDieValue+"'s");
+        System.out.println(currentPlayer.getName()+ " is betting "+newBetNumOfDice+" "+newBetDieValue+"'s");
+
         if (this.isfirstRound || isBetValid(newBetNumOfDice, newBetDieValue)){
             this.currentBet = new int[]{newBetNumOfDice, newBetDieValue};
-            this.currentPlayer = player;
+            this.currentBetIsCorrect = true;
             this.isfirstRound = false;
         }
         else{
+            this.currentBetIsCorrect = false;
             System.out.println("Please make another bet");
         }
     }
@@ -41,6 +89,11 @@ public class Perudo {
     private boolean isBetValid(int newBetNumOfDice, int newBetDieValue){
         int currentNumOfDice = this.currentBet[0];
         int currentDieValue = this.currentBet[1];
+
+        if(currentDieValue < 1 || currentDieValue >6){
+            System.out.println("Die value can only be between 1 and 6");
+            return false;
+        }
 //        Not Betting Pacos
         if (newBetDieValue > 1){
             int minNumOfDiceToBet = currentNumOfDice;
@@ -87,11 +140,11 @@ public class Perudo {
 
     }
 
-    public void revealDice(Player currentPlayer) {
-        this.previousPlayer = this.currentPlayer;
-        this.currentPlayer = currentPlayer;
+    public void revealDice() {
+//        Get Bet information
         int numOfDiceBet = currentBet[0];
         int dieValue = currentBet[1];
+//        Compare Bet with actual results
         int numOfDiceResult = 0;
         for(Player player: players){
             int[] diceValues = player.getDiceValues();
@@ -109,26 +162,43 @@ public class Perudo {
 
         System.out.println("We have found: "+numOfDiceResult +" dice with a value of "+ dieValue + " or Pacos");
         System.out.println("The bet was for: "+ numOfDiceBet);
-        boolean betResult = numOfDiceResult >= numOfDiceBet ;
-        if(betResult){
-            System.out.println(this.previousPlayer.getName() + " won his/her bet.");
-            handleResult(this.currentPlayer);
+        boolean betIsCorrect = numOfDiceResult >= numOfDiceBet ;
+        int looserIndex;
+        Player looser;
+        if(betIsCorrect){
+            looser = this.currentPlayer;
+            System.out.println(getPreviousPlayer().getName() + " made a correct bet.");
+            looserIndex = this.players.indexOf(looser);
+
 
         } else {
-            System.out.println(this.previousPlayer.getName() + " was lying.");
-            handleResult(this.previousPlayer);
+            looser = getPreviousPlayer();
+            System.out.println(getPreviousPlayer().getName() + " was lying.");
+            looserIndex = this.players.indexOf(looser);
         }
+        removeADie(looser);
+        if (this.isRunning){
+            if (looserIndex == this.players.size()){
+                looserIndex --;
+            }
+            this.setCurrentPlayer(looserIndex);
 //        Reset Game
-        this.isfirstRound = true;
+            this.isfirstRound = true;
+        }
     }
 
-    public void handleResult(Player looser){
+    public void removeADie(Player looser){
         int numOfDie = looser.getDiceValues().length;
         if (numOfDie > 1){
             looser.looseADie();
         }
         else {
             this.removeAPlayer(looser);
+//            Check if only one player remaining
+            if (this.players.size() == 1){
+                System.out.println(this.players.get(0).getName() + " won!");
+                this.isRunning = false;
+            }
         }
     }
 }
