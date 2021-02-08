@@ -1,11 +1,9 @@
 package com.example.mypackage;
 
-import java.util.InputMismatchException;
-import java.util.NoSuchElementException;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
+    public static String[] robotNames = {"Yellow", "Blue", "Pink", "Blue","Green"};
 
     public static void main(String[] args) {
         try{
@@ -53,13 +51,14 @@ public class Main {
         System.out.println("Enter number of players: ");
         int playerNumber = getInt(2,6);
 
-        for (int i =0; i<playerNumber; i++){
-            System.out.println("Enter player #"+(i+1)+ " name:");
-            String playerName = scanner.next();
-            Player player = new Player(playerName);
-
-            perudo.addPlayer(player);
-            scanner.nextLine();
+        System.out.println("Enter player your name: ");
+        String playerName = scanner.next();
+        Player player = new Player(playerName);
+        perudo.addPlayer(player);
+        for (int i =0; i<playerNumber-1; i++){
+            playerName = robotNames[i];
+            RobotPlayer robotPlayer = new RobotPlayer(playerName);
+            perudo.addPlayer(robotPlayer);
         }
 //        Set current player
         perudo.setCurrentPlayer(new Random().nextInt(playerNumber));
