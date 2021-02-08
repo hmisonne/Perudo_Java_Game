@@ -11,6 +11,17 @@ public class Perudo {
     private boolean isRunning;
     private boolean currentBetIsCorrect;
 
+    public int[] getCurrentBet() {
+        return currentBet;
+    }
+
+    public int getNumberOfDice() {
+        int numOfDie = 0;
+        for(Player player : this.players){
+            numOfDie += player.getNumberOfDice();
+        }
+        return numOfDie;
+    }
 
     public Perudo() {
         this.players = new ArrayList<>();
