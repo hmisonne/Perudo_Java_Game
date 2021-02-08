@@ -20,6 +20,10 @@ public class Player{
         return diceValues;
     }
 
+    public int getNumberOfDice() {
+        return diceValues.length;
+    }
+
 
     public void shuffleDice(){
         Random rand = new Random();
