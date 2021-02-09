@@ -11,7 +11,7 @@ public class RobotPlayer extends Player{
         return new int[] {previousBet[0]+1,previousBet[1]};
     }
     public int[] makeABet(int numberOfDice){
-        return new int[] {numberOfDice/3-1, new Random().nextInt(6)+1};
+        return new int[] {numberOfDice/3-1, new Random().nextInt(6)+2};
     }
     public boolean decideToBet(int[] currentBet, int numberOfDice){
         int currNumOfDice = currentBet[0];
