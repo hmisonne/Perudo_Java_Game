@@ -37,7 +37,15 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         while (true){
             try {
-                return scanner.nextInt();
+                int input;
+                while (true) {
+                    input = scanner.nextInt();
+                    if(input > 0){
+                        break;
+                    }
+                    System.out.println("Please enter a positive number");
+                }
+                return input;
             } catch (InputMismatchException e){
                 scanner.nextLine();
                 System.out.println("Please enter a number");
@@ -61,7 +69,8 @@ public class Main {
                     System.out.println("Choose\n" +
                             "1 to make a bet\n" +
                             "0 to quit");
-                    getUserSelection(perudo);
+                    int choice = getInt(0,1);
+                    processUserSelection(perudo, choice);
                 }
 
             }
@@ -87,13 +96,10 @@ public class Main {
                             "\t1 to make a bet\n" +
                             "\t2 to reveal the dice\n" +
                             "\t0 to quit");
-                    getUserSelection(perudo);
+                    int choice = getInt(0,2);
+                    processUserSelection(perudo, choice);
                 }
-
             }
-
-
-
         }
     }
 
@@ -118,11 +124,7 @@ public class Main {
         return perudo;
     }
 
-    public static void getUserSelection(Perudo perudo){
-
-        Scanner scanner = new Scanner(System.in);
-        int choice = scanner.nextInt();
-        scanner.nextLine();
+    public static void processUserSelection(Perudo perudo, int choice){
         switch (choice) {
             case 0:
                 quit = true;
