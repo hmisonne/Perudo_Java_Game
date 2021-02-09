@@ -1,7 +1,7 @@
 package com.example.mypackage;
 
 import java.util.ArrayList;
-import java.util.ListIterator;
+import java.util.Arrays;
 
 public class Perudo {
     private ArrayList<Player> players;
@@ -152,13 +152,16 @@ public class Perudo {
     }
 
     public void revealDice() {
+        System.out.println(currentPlayer.getName()+ " wants to see the dice");
 //        Get Bet information
         int numOfDiceBet = currentBet[0];
         int dieValue = currentBet[1];
+        System.out.println("The current bet was for: "+ numOfDiceBet +" "+ dieValue);
 //        Compare Bet with actual results
         int numOfDiceResult = 0;
         for(Player player: players){
             int[] diceValues = player.getDiceValues();
+            System.out.println(player.getName()+ " had: "+ Arrays.toString(diceValues));
             for (int die : diceValues){
                 if (die == dieValue){
                     numOfDiceResult ++;
@@ -171,8 +174,7 @@ public class Perudo {
 
         }
 
-        System.out.println("We have found: "+numOfDiceResult +" dice with a value of "+ dieValue + " or Pacos");
-        System.out.println("The bet was for: "+ numOfDiceBet);
+        System.out.println("There was: "+numOfDiceResult +" dice with a value of "+ dieValue + " (including Pacos)");
         boolean betIsCorrect = numOfDiceResult >= numOfDiceBet ;
         int looserIndex;
         Player looser;
