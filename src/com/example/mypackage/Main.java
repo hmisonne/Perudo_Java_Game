@@ -73,8 +73,13 @@ public class Main {
                 System.out.println("It's "+perudo.getCurrentPlayer().getName() +"'s turn,");
                 if (perudo.getCurrentPlayer() instanceof RobotPlayer){
                     RobotPlayer robotPlayer = (RobotPlayer) perudo.getCurrentPlayer();
-                    int[] newBet = robotPlayer.makeABet(perudo.getCurrentBet());
-                    perudo.makeABet(newBet);
+                    if(robotPlayer.decideToBet(perudo.getCurrentBet(),perudo.getNumberOfDice())){
+                        int[] newBet = robotPlayer.makeABet(perudo.getCurrentBet());
+                        perudo.makeABet(newBet);
+                    } else {
+                        perudo.revealDice();
+                    }
+
                 }
                 else {
                     System.out.println("You currently have: "+ Arrays.toString(perudo.getCurrentPlayer().getDiceValues()));
