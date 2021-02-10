@@ -86,7 +86,7 @@ public class Perudo {
         int newBetDieValue = currentBet[1];
         System.out.println(currentPlayer.getName()+ " is betting "+newBetNumOfDice+" "+newBetDieValue+"'s");
 
-        if (this.isfirstRound || isBetValid(newBetNumOfDice, newBetDieValue)){
+        if (this.isfirstRound || isNewBetHigher(newBetNumOfDice, newBetDieValue)){
             this.currentBet = new int[]{newBetNumOfDice, newBetDieValue};
             this.currentBetIsCorrect = true;
             this.isfirstRound = false;
@@ -97,7 +97,7 @@ public class Perudo {
         }
     }
 
-    private boolean isBetValid(int newBetNumOfDice, int newBetDieValue){
+    public boolean isNewBetHigher(int newBetNumOfDice, int newBetDieValue){
         int currentNumOfDice = this.currentBet[0];
         int currentDieValue = this.currentBet[1];
 
@@ -144,6 +144,10 @@ public class Perudo {
         }
     }
 
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
     public void removeAPlayer(Player player){
         String name = player.getName();
         players.remove(player);
@@ -153,6 +157,30 @@ public class Perudo {
 
     public void revealDice() {
         System.out.println(currentPlayer.getName()+ " wants to see the dice");
+        boolean betIsCorrect = isCurrentBetCorrect();
+        int looserIndex;
+        Player looser;
+        if(betIsCorrect){
+            looser = this.currentPlayer;
+            System.out.println(getPreviousPlayer().getName() + " made a correct bet.");
+            looserIndex = this.players.indexOf(looser);
+        } else {
+            looser = getPreviousPlayer();
+            System.out.println(getPreviousPlayer().getName() + " was lying.");
+            looserIndex = this.players.indexOf(looser);
+        }
+        this.removeADie(looser);
+        if (this.isRunning){
+            if (looserIndex == this.players.size()){
+                looserIndex --;
+            }
+            this.setCurrentPlayer(looserIndex);
+//        Reset Game
+            this.isfirstRound = true;
+        }
+    }
+
+    public boolean isCurrentBetCorrect(){
 //        Get Bet information
         int numOfDiceBet = currentBet[0];
         int dieValue = currentBet[1];
@@ -175,33 +203,11 @@ public class Perudo {
         }
 
         System.out.println("There was: "+numOfDiceResult +" dice with a value of "+ dieValue + " (including Pacos)");
-        boolean betIsCorrect = numOfDiceResult >= numOfDiceBet ;
-        int looserIndex;
-        Player looser;
-        if(betIsCorrect){
-            looser = this.currentPlayer;
-            System.out.println(getPreviousPlayer().getName() + " made a correct bet.");
-            looserIndex = this.players.indexOf(looser);
-
-
-        } else {
-            looser = getPreviousPlayer();
-            System.out.println(getPreviousPlayer().getName() + " was lying.");
-            looserIndex = this.players.indexOf(looser);
-        }
-        removeADie(looser);
-        if (this.isRunning){
-            if (looserIndex == this.players.size()){
-                looserIndex --;
-            }
-            this.setCurrentPlayer(looserIndex);
-//        Reset Game
-            this.isfirstRound = true;
-        }
+        return numOfDiceResult >= numOfDiceBet;
     }
 
     public void removeADie(Player looser){
-        int numOfDie = looser.getDiceValues().length;
+        int numOfDie = looser.getNumberOfDice();
         if (numOfDie > 1){
             looser.looseADie();
         }
