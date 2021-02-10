@@ -3,7 +3,7 @@ package com.example.mypackage;
 import java.util.*;
 
 public class Main {
-    public static String[] robotNames = {"Yellow", "Blue", "Pink", "Blue","Green"};
+    public static String[] robotNames = {"Yellow", "Blue", "Pink", "Red","Green"};
     public static boolean quit = false;
 
     public static void main(String[] args) {
