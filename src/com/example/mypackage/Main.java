@@ -75,7 +75,7 @@ public class Main {
 
             }
             else {
-                if (perudo.currentBetIsCorrect()){
+                if (!perudo.higherBetIsRequired()){
                     perudo.nextPlayer();
                 }
                 System.out.println("\n################################\n");

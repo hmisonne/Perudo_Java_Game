@@ -9,7 +9,7 @@ public class Perudo {
     private Player currentPlayer;
     private boolean isfirstRound;
     private boolean isRunning;
-    private boolean currentBetIsCorrect;
+    private boolean higherBetIsRequired;
 
     public int[] getCurrentBet() {
         return currentBet;
@@ -28,8 +28,8 @@ public class Perudo {
         this.isfirstRound = true;
         this.isRunning = true;
     }
-    public boolean currentBetIsCorrect() {
-        return currentBetIsCorrect;
+    public boolean higherBetIsRequired() {
+        return higherBetIsRequired;
     }
 
     public boolean isRunning() {
@@ -88,11 +88,11 @@ public class Perudo {
 
         if (this.isfirstRound || isNewBetHigher(newBetNumOfDice, newBetDieValue)){
             this.currentBet = new int[]{newBetNumOfDice, newBetDieValue};
-            this.currentBetIsCorrect = true;
+            this.higherBetIsRequired = false;
             this.isfirstRound = false;
         }
         else{
-            this.currentBetIsCorrect = false;
+            this.higherBetIsRequired = true;
             System.out.println("Please make another bet");
         }
     }
