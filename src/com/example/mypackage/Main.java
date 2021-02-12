@@ -53,33 +53,22 @@ public class Main {
         }
     }
     public static void play() {
-//        Initialize Game
         Perudo perudo = initializeGame();
-        while (perudo.isRunning() && !quit){
-            if (perudo.isfirstRound()){
+        while (perudo.isRunning()) {
+            if (perudo.isfirstRound()) {
                 perudo.shuffleDice();
-                System.out.println("It's "+perudo.getCurrentPlayer().getName() +" turn");
                 if (perudo.getCurrentPlayer() instanceof RobotPlayer){
                     RobotPlayer robotPlayer = (RobotPlayer) perudo.getCurrentPlayer();
                     int[] newBet = robotPlayer.makeABet(perudo.getNumberOfDice());
                     perudo.makeABet(newBet);
                 }
                 else{
-                    System.out.println("You currently have: "+ Arrays.toString(perudo.getCurrentPlayer().getDiceValues()));
-                    System.out.println("Choose\n" +
-                            "1 to make a bet\n" +
-                            "0 to quit");
                     int choice = getInt(0,1);
                     processUserSelection(perudo, choice);
+                    System.out.println("Waiting for player input");
                 }
-
-            }
-            else {
-                if (!perudo.higherBetIsRequired()){
-                    perudo.nextPlayer();
-                }
-                System.out.println("\n################################\n");
-                System.out.println("It's "+perudo.getCurrentPlayer().getName() +"'s turn,");
+            } else {
+                perudo.nextPlayer();
                 if (perudo.getCurrentPlayer() instanceof RobotPlayer){
                     RobotPlayer robotPlayer = (RobotPlayer) perudo.getCurrentPlayer();
                     if(robotPlayer.decideToBet(perudo.getCurrentBet(),perudo.getNumberOfDice())){
@@ -91,38 +80,100 @@ public class Main {
 
                 }
                 else {
-                    System.out.println("You currently have: "+ Arrays.toString(perudo.getCurrentPlayer().getDiceValues()));
-                    System.out.println("Choose:\n" +
-                            "\t1 to make a bet\n" +
-                            "\t2 to reveal the dice\n" +
-                            "\t0 to quit");
-                    int choice = getInt(0,2);
-                    processUserSelection(perudo, choice);
+                    System.out.println("Waiting for player input");
                 }
             }
+
         }
     }
+//    public static void play2() {
+////        Initialize Game
+//        Perudo perudo = initializeGame();
+//        while (perudo.isRunning() && !quit){
+//            if (perudo.isfirstRound()){
+//                perudo.shuffleDice();
+//                System.out.println("It's "+perudo.getCurrentPlayer().getName() +" turn");
+//                if (perudo.getCurrentPlayer() instanceof RobotPlayer){
+//                    RobotPlayer robotPlayer = (RobotPlayer) perudo.getCurrentPlayer();
+//                    int[] newBet = robotPlayer.makeABet(perudo.getNumberOfDice());
+//                    perudo.makeABet(newBet);
+//                }
+//                else{
+//                    System.out.println("You currently have: "+ Arrays.toString(perudo.getCurrentPlayer().getDiceValues()));
+//                    System.out.println("Choose\n" +
+//                            "1 to make a bet\n" +
+//                            "0 to quit");
+//                    int choice = getInt(0,1);
+//                    processUserSelection(perudo, choice);
+//                }
+//
+//            }
+//            else {
+//                if (!perudo.higherBetIsRequired()){
+//                    perudo.nextPlayer();
+//                }
+//                System.out.println("\n################################\n");
+//                System.out.println("It's "+perudo.getCurrentPlayer().getName() +"'s turn,");
+//                if (perudo.getCurrentPlayer() instanceof RobotPlayer){
+//                    RobotPlayer robotPlayer = (RobotPlayer) perudo.getCurrentPlayer();
+//                    if(robotPlayer.decideToBet(perudo.getCurrentBet(),perudo.getNumberOfDice())){
+//                        int[] newBet = robotPlayer.makeABet(perudo.getCurrentBet());
+//                        perudo.makeABet(newBet);
+//                    } else {
+//                        perudo.revealDice();
+//                    }
+//
+//                }
+//                else {
+//                    System.out.println("You currently have: "+ Arrays.toString(perudo.getCurrentPlayer().getDiceValues()));
+//                    System.out.println("Choose:\n" +
+//                            "\t1 to make a bet\n" +
+//                            "\t2 to reveal the dice\n" +
+//                            "\t0 to quit");
+//                    int choice = getInt(0,2);
+//                    processUserSelection(perudo, choice);
+//                }
+//            }
+//        }
+//    }
 
     public static Perudo initializeGame(){
         Perudo perudo = new Perudo();
-        Scanner scanner = new Scanner(System.in);
-//        Add players
-        System.out.println("Enter number of players: ");
-        int playerNumber = getInt(2,6);
-
-        System.out.println("Enter player your name: ");
-        String playerName = scanner.next();
-        Player player = new Player(playerName);
+        Player player = new Player("You");
+        int playerNumber = 5;
         perudo.addPlayer(player);
         for (int i =0; i<playerNumber-1; i++){
-            playerName = robotNames[i];
+            String playerName = robotNames[i];
             RobotPlayer robotPlayer = new RobotPlayer(playerName);
             perudo.addPlayer(robotPlayer);
         }
 //        Set current player
         perudo.setCurrentPlayer(new Random().nextInt(playerNumber));
+        perudo.setPlayerFrame();
         return perudo;
     }
+
+//    public static Perudo initializeGame2(){
+//        Perudo perudo = new Perudo();
+//        Scanner scanner = new Scanner(System.in);
+////        Add players
+//        System.out.println("Enter number of players: ");
+//        int playerNumber = getInt(2,6);
+//
+//        System.out.println("Enter player your name: ");
+//        String playerName = scanner.next();
+//        Player player = new Player(playerName);
+//        perudo.addPlayer(player);
+//        for (int i =0; i<playerNumber-1; i++){
+//            playerName = robotNames[i];
+//            RobotPlayer robotPlayer = new RobotPlayer(playerName);
+//            perudo.addPlayer(robotPlayer);
+//        }
+////        Set current player
+//        perudo.setCurrentPlayer(new Random().nextInt(playerNumber));
+//        perudo.setPlayerFrame();
+//        return perudo;
+//    }
 
     public static void processUserSelection(Perudo perudo, int choice){
         switch (choice) {
