@@ -1,5 +1,7 @@
 package com.example.mypackage;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -10,6 +12,16 @@ public class Perudo {
     private boolean isfirstRound;
     private boolean isRunning;
     private boolean higherBetIsRequired;
+    public GUI GUIPerudo;
+
+
+    public Perudo() {
+        this.players = new ArrayList<>();
+        this.isfirstRound = true;
+        this.isRunning = true;
+        this.GUIPerudo = new GUI(this);
+    }
+
 
     public int[] getCurrentBet() {
         return currentBet;
@@ -22,12 +34,10 @@ public class Perudo {
         }
         return numOfDie;
     }
-
-    public Perudo() {
-        this.players = new ArrayList<>();
-        this.isfirstRound = true;
-        this.isRunning = true;
+    public void setPlayerFrame(){
+        GUIPerudo.setPlayerFrame(players);
     }
+
     public boolean higherBetIsRequired() {
         return higherBetIsRequired;
     }
@@ -56,6 +66,9 @@ public class Perudo {
         for(Player player: players){
            player.shuffleDice();
         }
+//        players_panel[0].setText(players.get(0).getName() + ": "
+//                + Arrays.toString(players.get(0).getDiceValues())
+//                );
     }
     public Player getPreviousPlayer(){
         int playerIndex = players.indexOf(currentPlayer);
@@ -90,6 +103,7 @@ public class Perudo {
             this.currentBet = new int[]{newBetNumOfDice, newBetDieValue};
             this.higherBetIsRequired = false;
             this.isfirstRound = false;
+            GUIPerudo.updateUI(currentPlayer, currentBet, players);
         }
         else{
             this.higherBetIsRequired = true;
