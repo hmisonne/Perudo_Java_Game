@@ -142,7 +142,7 @@ public class GUI {
         } catch (InterruptedException interruptedException) {
             interruptedException.printStackTrace();
         }
-        perudo.nextPlayer();
+        perudo.setCurrentPlayerToNextPlayer();
         if (perudo.getCurrentPlayer() instanceof RobotPlayer){
             RobotPlayer robotPlayer = (RobotPlayer) perudo.getCurrentPlayer();
             if(robotPlayer.decideToBet(perudo.getCurrentBet(),perudo.getNumberOfDice())){

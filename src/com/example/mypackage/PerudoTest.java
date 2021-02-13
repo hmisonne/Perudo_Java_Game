@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -89,7 +88,7 @@ class PerudoTest {
     void nextPlayer() {
 //        Setting current player to Blue, check if next player returns Green.
         perudo.setCurrentPlayer(1);
-        perudo.nextPlayer();
+        perudo.setCurrentPlayerToNextPlayer();
         assertEquals(perudo.getCurrentPlayer().getName(),"Green");
     }
 
@@ -131,7 +130,7 @@ class PerudoTest {
         perudo.shuffleDice();
         perudo.setCurrentPlayer(1);
         perudo.makeABet(new int[] {3,5});
-        perudo.nextPlayer();
+        perudo.setCurrentPlayerToNextPlayer();
 //        Keeping the same quantity and value of dice  should return false
         assertFalse(perudo.isNewBetHigher(3,5));
 //        Increasing quantity of dice with any dice value should return true
@@ -151,7 +150,7 @@ class PerudoTest {
         perudo.shuffleDice();
         perudo.setCurrentPlayer(1);
         perudo.makeABet(new int[] {2,1});
-        perudo.nextPlayer();
+        perudo.setCurrentPlayerToNextPlayer();
 //        Increasing number of pacos should return true
         assertTrue(perudo.isNewBetHigher(3,1));
 //       Multiplying by 2 + 1 the number of dice should return true

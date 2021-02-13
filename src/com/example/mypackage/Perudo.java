@@ -71,7 +71,7 @@ public class Perudo {
         return players.get(previousPlayerIndex);
     }
 
-    public void nextPlayer(){
+    public void setCurrentPlayerToNextPlayer(){
         int playerIndex = players.indexOf(currentPlayer);
         int nextPlayerIndex;
 //        If end of the list, go back to first player

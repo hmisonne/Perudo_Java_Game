@@ -75,7 +75,7 @@ public class Main {
                     System.out.println("Waiting for player input");
                 }
             } else {
-                perudo.nextPlayer();
+                perudo.setCurrentPlayerToNextPlayer();
                 if (perudo.getCurrentPlayer() instanceof RobotPlayer){
                     RobotPlayer robotPlayer = (RobotPlayer) perudo.getCurrentPlayer();
                     if(robotPlayer.decideToBet(perudo.getCurrentBet(),perudo.getNumberOfDice())){
