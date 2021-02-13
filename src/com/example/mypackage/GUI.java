@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 public class GUI {
     private JLabel labelNum = new JLabel("Number of dice: ");
@@ -32,6 +33,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 newBetAction();
+                goToNextPlayer();
             }
         });
 
@@ -95,15 +97,21 @@ public class GUI {
     }
 
     public void newBetAction(){
-        int num = Integer.parseInt(textFieldNum.getText()) ;
-        int val = Integer.parseInt(textFieldVal.getText());
-        if(perudo.isNewBetHigher(num, val)){
-            labelWarning.setText("You made a new bet: "+num+ " "+ val+"'s");
-            perudo.makeABet(new int[] {num, val});
-            showPlayersBet(players.get(0), new int[] {num, val});
-        } else {
-            labelWarning.setText("Invalid Bet.");
-        };
+        try {
+            int num = Integer.parseInt(textFieldNum.getText()) ;
+            int val = Integer.parseInt(textFieldVal.getText());
+            if(perudo.isNewBetHigher(num, val)){
+                labelWarning.setText("You made a new bet: "+num+ " "+ val+"'s");
+                perudo.makeABet(new int[] {num, val});
+                showPlayersBet(players.get(0), new int[] {num, val});
+            } else {
+                labelWarning.setText("Invalid Bet.");
+            };
+        } catch (NumberFormatException e){
+            labelWarning.setText("Please enter a number.");
+        }
+
+
     }
 
 
@@ -126,5 +134,26 @@ public class GUI {
     public void showDiceInHand(){
         textDiceInHand.setText(Arrays.toString(
                 players.get(0).getDiceValues()));
+    }
+
+    public void goToNextPlayer() {
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException interruptedException) {
+            interruptedException.printStackTrace();
+        }
+        perudo.nextPlayer();
+        if (perudo.getCurrentPlayer() instanceof RobotPlayer){
+            RobotPlayer robotPlayer = (RobotPlayer) perudo.getCurrentPlayer();
+            if(robotPlayer.decideToBet(perudo.getCurrentBet(),perudo.getNumberOfDice())){
+                int[] newBet = robotPlayer.makeABet(perudo.getCurrentBet());
+                perudo.makeABet(newBet);
+                showPlayersBet(robotPlayer, newBet);
+            } else {
+                perudo.revealDice();
+                showPlayersDice();
+            }
+
+        }
     }
 }
