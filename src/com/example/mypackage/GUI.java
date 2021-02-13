@@ -22,6 +22,8 @@ public class GUI {
     private ArrayList<Player> players;
     private JButton betButton = new JButton("Enter");
     private JButton revealDiceButton = new JButton("Reveal Dice");
+    private JButton newRoundButton = new JButton("New Round");
+
 
 
     public GUI(Perudo perudo) {
@@ -32,12 +34,25 @@ public class GUI {
         betButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                newBetAction();
-                goToNextPlayer();
+                if(newBetAction()){
+                    goToNextPlayer();
+                };
             }
         });
 
-
+        newRoundButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                startNewRound();
+            }
+        });
+        revealDiceButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                revealPlayersDice();
+                perudo.revealDice();
+            }
+        });
 
         // the panel with the button and text
         JPanel betPanel = new JPanel();
@@ -52,6 +67,7 @@ public class GUI {
         betPanel.add(textDiceInHand);
         betPanel.add(labelWarning);
         betPanel.add(revealDiceButton);
+        betPanel.add(newRoundButton);
         frame.setSize(800,800);
         mainPanel.setLayout(new GridLayout(3, 3));
         mainPanel.setBackground(new Color(150,150,150));
@@ -79,15 +95,16 @@ public class GUI {
             mainPanel.add(playersPanel[i]);
             playersPanel[i].setFont(new Font("MV Boli", Font.BOLD, 15));
         }
-        revealDiceButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                revealPlayersDice();
-//                perudo.revealDice();
-            }
-        });
-    }
 
+    }
+    public void resetPlayerDice() {
+        int playersNum = players.size();
+        for (int i = 0; i < playersNum; i++) {
+            Player player = players.get(i);
+            playersPanel[i].setText(player.getName() + ": " + player.getNumberOfDice() + " dice\n");
+        }
+
+    }
     public void revealPlayersDice() {
         int playersNum = players.size();
         for (int i = 0; i < playersNum; i++) {
@@ -96,19 +113,22 @@ public class GUI {
         }
     }
 
-    public void newBetAction(){
+    public boolean newBetAction(){
         try {
             int num = Integer.parseInt(textFieldNum.getText()) ;
             int val = Integer.parseInt(textFieldVal.getText());
-            if(perudo.isNewBetHigher(num, val)){
-                labelWarning.setText("You made a new bet: "+num+ " "+ val+"'s");
+            if(perudo.isfirstRound() || perudo.isNewBetHigher(num, val)){
                 perudo.makeABet(new int[] {num, val});
                 showPlayersBet(players.get(0), new int[] {num, val});
+                labelWarning.setText("You made a new bet: "+num+ " "+ val+"'s");
+                return true;
             } else {
                 labelWarning.setText("Invalid Bet.");
-            };
+                return false;
+            }
         } catch (NumberFormatException e){
             labelWarning.setText("Please enter a number.");
+            return false;
         }
 
 
@@ -125,7 +145,6 @@ public class GUI {
     public void showPlayersDice(){
         int playersNum = players.size();
         for (int i = 0; i < playersNum; i++) {
-            playersPanel[i] = new JLabel();
             Player player = players.get(i);
             playersPanel[i].setText(player.getName() + " had: " + Arrays.toString(player.getDiceValues()));
         }
@@ -135,7 +154,21 @@ public class GUI {
         textDiceInHand.setText(Arrays.toString(
                 players.get(0).getDiceValues()));
     }
+    public void startNewRound(){
+        perudo.shuffleDice();
+        showDiceInHand();
+        resetPlayerDice();
+        if (perudo.getCurrentPlayer() instanceof RobotPlayer) robotBet();
 
+    }
+    public void robotBet(){
+        RobotPlayer robotPlayer = (RobotPlayer) perudo.getCurrentPlayer();
+        int[] newBet = robotPlayer.makeABet(perudo.getNumberOfDice());
+        perudo.makeABet(newBet);
+//            Update UI with Bet Value
+        showPlayersBet(robotPlayer, newBet);
+
+    }
     public void goToNextPlayer() {
         try {
             TimeUnit.SECONDS.sleep(1);
@@ -146,12 +179,10 @@ public class GUI {
         if (perudo.getCurrentPlayer() instanceof RobotPlayer){
             RobotPlayer robotPlayer = (RobotPlayer) perudo.getCurrentPlayer();
             if(robotPlayer.decideToBet(perudo.getCurrentBet(),perudo.getNumberOfDice())){
-                int[] newBet = robotPlayer.makeABet(perudo.getCurrentBet());
-                perudo.makeABet(newBet);
-                showPlayersBet(robotPlayer, newBet);
+                robotBet();
             } else {
-                perudo.revealDice();
                 showPlayersDice();
+                perudo.revealDice();
             }
 
         }
