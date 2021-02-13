@@ -11,6 +11,8 @@ public class GUI implements ActionListener {
     private JTextField textFieldNum = new JTextField();
     private JLabel labelVal = new JLabel("Die Value: ");
     private JTextField textFieldVal = new JTextField();
+    private JLabel labelDiceInHand = new JLabel("Dice in hand: ");
+    private JLabel textDiceInHand = new JLabel();
     private JFrame frame = new JFrame();
     private JPanel mainPanel = new JPanel();
     private JLabel[] playersPanel;
@@ -33,6 +35,8 @@ public class GUI implements ActionListener {
         betPanel.add(labelVal);
         betPanel.add(textFieldVal);
         betPanel.add(button);
+        betPanel.add(labelDiceInHand);
+        betPanel.add(textDiceInHand);
         frame.setSize(800,800);
         mainPanel.setLayout(new GridLayout(3, 3));
         mainPanel.setBackground(new Color(150,150,150));
@@ -56,15 +60,7 @@ public class GUI implements ActionListener {
         for (int i = 0; i < playersNum; i++) {
             playersPanel[i] = new JLabel();
             Player player = players.get(i);
-            if (player instanceof RobotPlayer) {
-                playersPanel[i].setText(player.getName() + ": " + player.getNumberOfDice() + " dice\n");
-            } else {
-                playersPanel[i].setText(player.getName() + ": "
-                        + Arrays.toString(player.getDiceValues())
-                );
-            }
-
-
+            playersPanel[i].setText(player.getName() + ": " + player.getNumberOfDice() + " dice\n");
             mainPanel.add(playersPanel[i]);
             playersPanel[i].setFont(new Font("MV Boli", Font.BOLD, 15));
         }
@@ -83,19 +79,13 @@ public class GUI implements ActionListener {
 
     public void updateUI(Player player, int[] currentBet){
         int i = players.indexOf(player);
-        if (player instanceof RobotPlayer){
-            playersPanel[i].setText(player.getName() + ": "+ player.getNumberOfDice() + " dice. Bet:"
-                    + Arrays.toString(currentBet));
-        } else {
-            playersPanel[i].setText(player.getName() + ": "
-                    + Arrays.toString(player.getDiceValues())
-                    + " Bet: "
-                    + Arrays.toString(currentBet));
-        }
+        playersPanel[i].setText(player.getName() + ": "+ player.getNumberOfDice() + " dice. Bet:"
+                + Arrays.toString(currentBet));
+
+    }
+
+    public void showDiceInHand(){
+        textDiceInHand.setText(Arrays.toString(
+                players.get(0).getDiceValues()));
     }
 }
-
-
-//        players_panel[0].setText(players.get(0).getName() + ": "
-//                + Arrays.toString(players.get(0).getDiceValues())
-//                );
