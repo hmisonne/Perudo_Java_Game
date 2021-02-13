@@ -6,7 +6,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class GUI implements ActionListener {
+public class GUI {
     private JLabel labelNum = new JLabel("Number of dice: ");
     private JTextField textFieldNum = new JTextField();
     private JLabel labelVal = new JLabel("Die Value: ");
@@ -19,13 +19,23 @@ public class GUI implements ActionListener {
     private JLabel[] playersPanel;
     private Perudo perudo;
     private ArrayList<Player> players;
+    private JButton betButton = new JButton("Enter");
+    private JButton revealDiceButton = new JButton("Reveal Dice");
+
 
     public GUI(Perudo perudo) {
         this.perudo = perudo;
         this.players = perudo.getPlayers();
         // the clickable button
-        JButton button = new JButton("Enter");
-        button.addActionListener(this);
+
+        betButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                newBetAction();
+            }
+        });
+
+
 
         // the panel with the button and text
         JPanel betPanel = new JPanel();
@@ -35,10 +45,11 @@ public class GUI implements ActionListener {
         betPanel.add(textFieldNum);
         betPanel.add(labelVal);
         betPanel.add(textFieldVal);
-        betPanel.add(button);
+        betPanel.add(betButton);
         betPanel.add(labelDiceInHand);
         betPanel.add(textDiceInHand);
         betPanel.add(labelWarning);
+        betPanel.add(revealDiceButton);
         frame.setSize(800,800);
         mainPanel.setLayout(new GridLayout(3, 3));
         mainPanel.setBackground(new Color(150,150,150));
@@ -66,10 +77,24 @@ public class GUI implements ActionListener {
             mainPanel.add(playersPanel[i]);
             playersPanel[i].setFont(new Font("MV Boli", Font.BOLD, 15));
         }
+        revealDiceButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                revealPlayersDice();
+//                perudo.revealDice();
+            }
+        });
     }
 
-    // process the button clicks
-    public void actionPerformed(ActionEvent e) {
+    public void revealPlayersDice() {
+        int playersNum = players.size();
+        for (int i = 0; i < playersNum; i++) {
+            Player player = players.get(i);
+            playersPanel[i].setText(player.getName() + ": " + Arrays.toString(player.getDiceValues()) );
+        }
+    }
+
+    public void newBetAction(){
         int num = Integer.parseInt(textFieldNum.getText()) ;
         int val = Integer.parseInt(textFieldVal.getText());
         if(perudo.isNewBetHigher(num, val)){
