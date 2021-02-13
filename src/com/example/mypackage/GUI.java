@@ -13,6 +13,7 @@ public class GUI implements ActionListener {
     private JTextField textFieldVal = new JTextField();
     private JLabel labelDiceInHand = new JLabel("Dice in hand: ");
     private JLabel textDiceInHand = new JLabel();
+    private JLabel labelWarning = new JLabel();
     private JFrame frame = new JFrame();
     private JPanel mainPanel = new JPanel();
     private JLabel[] playersPanel;
@@ -37,6 +38,7 @@ public class GUI implements ActionListener {
         betPanel.add(button);
         betPanel.add(labelDiceInHand);
         betPanel.add(textDiceInHand);
+        betPanel.add(labelWarning);
         frame.setSize(800,800);
         mainPanel.setLayout(new GridLayout(3, 3));
         mainPanel.setBackground(new Color(150,150,150));
@@ -70,10 +72,13 @@ public class GUI implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         int num = Integer.parseInt(textFieldNum.getText()) ;
         int val = Integer.parseInt(textFieldVal.getText());
-        perudo.makeABet(new int[] {num, val});
-        showPlayersBet(players.get(0), new int[] {num, val});
-        System.out.println("num: "+ num + " val: "+ val);
-//        labelNum.setText("Number of clicks:  " + clicks);
+        if(perudo.isNewBetHigher(num, val)){
+            labelWarning.setText("You made a new bet: "+num+ " "+ val+"'s");
+            perudo.makeABet(new int[] {num, val});
+            showPlayersBet(players.get(0), new int[] {num, val});
+        } else {
+            labelWarning.setText("Invalid Bet.");
+        };
     }
 
 
@@ -82,6 +87,15 @@ public class GUI implements ActionListener {
         playersPanel[i].setText(player.getName() + ": "+ player.getNumberOfDice() + " dice. Bet:"
                 + Arrays.toString(currentBet));
 
+    }
+
+    public void showPlayersDice(){
+        int playersNum = players.size();
+        for (int i = 0; i < playersNum; i++) {
+            playersPanel[i] = new JLabel();
+            Player player = players.get(i);
+            playersPanel[i].setText(player.getName() + " had: " + Arrays.toString(player.getDiceValues()));
+        }
     }
 
     public void showDiceInHand(){

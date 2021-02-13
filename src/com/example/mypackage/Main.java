@@ -59,18 +59,19 @@ public class Main {
         while (perudo.isRunning()) {
             if (perudo.isfirstRound()) {
                 perudo.shuffleDice();
+                perudoGUI.showDiceInHand();
                 if (perudo.getCurrentPlayer() instanceof RobotPlayer){
                     RobotPlayer robotPlayer = (RobotPlayer) perudo.getCurrentPlayer();
                     int[] newBet = robotPlayer.makeABet(perudo.getNumberOfDice());
                     perudo.makeABet(newBet);
-                    perudoGUI.updateUI(robotPlayer, newBet);
+                    perudoGUI.showPlayersBet(robotPlayer, newBet);
                 }
                 else{
                     System.out.println("Choose\n" +
                             "1 to make a bet\n" +
                             "0 to quit");
                     int choice = getInt(0,1);
-                    processUserSelection(perudo, choice);
+                    processUserSelection(choice);
                     System.out.println("Waiting for player input");
                 }
             } else {
@@ -80,9 +81,10 @@ public class Main {
                     if(robotPlayer.decideToBet(perudo.getCurrentBet(),perudo.getNumberOfDice())){
                         int[] newBet = robotPlayer.makeABet(perudo.getCurrentBet());
                         perudo.makeABet(newBet);
-                        perudoGUI.updateUI(robotPlayer, newBet);
+                        perudoGUI.showPlayersBet(robotPlayer, newBet);
                     } else {
                         perudo.revealDice();
+                        perudoGUI.showPlayersDice();
                     }
 
                 }
@@ -92,7 +94,7 @@ public class Main {
                         "\t2 to reveal the dice\n" +
                         "\t0 to quit");
                     int choice = getInt(0,2);
-                    processUserSelection(perudo, choice);
+                    processUserSelection(choice);
                     System.out.println("Waiting for player input");
                 }
             }
@@ -188,7 +190,7 @@ public class Main {
 //        return perudo;
 //    }
 
-    public static void processUserSelection(Perudo perudo, int choice){
+    public static void processUserSelection( int choice){
         switch (choice) {
             case 0:
                 quit = true;
@@ -198,10 +200,13 @@ public class Main {
                 int numOfDice = getInt();
                 System.out.print("Enter your bet for value of dice: ");
                 int dieValue = getInt(1,6);
-                perudo.makeABet(new int[]{numOfDice, dieValue});
+                int[] newBet = new int[]{numOfDice, dieValue};
+                perudo.makeABet(newBet);
+                perudoGUI.showPlayersBet(perudo.getPlayers().get(0), newBet);
                 break;
             case 2:
                 perudo.revealDice();
+                perudoGUI.showPlayersDice();
                 break;
         }
     }
