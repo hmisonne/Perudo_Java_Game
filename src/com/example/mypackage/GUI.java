@@ -71,13 +71,13 @@ public class GUI implements ActionListener {
         int num = Integer.parseInt(textFieldNum.getText()) ;
         int val = Integer.parseInt(textFieldVal.getText());
         perudo.makeABet(new int[] {num, val});
-        updateUI(players.get(0), new int[] {num, val});
+        showPlayersBet(players.get(0), new int[] {num, val});
         System.out.println("num: "+ num + " val: "+ val);
 //        labelNum.setText("Number of clicks:  " + clicks);
     }
 
 
-    public void updateUI(Player player, int[] currentBet){
+    public void showPlayersBet(Player player, int[] currentBet){
         int i = players.indexOf(player);
         playersPanel[i].setText(player.getName() + ": "+ player.getNumberOfDice() + " dice. Bet:"
                 + Arrays.toString(currentBet));
