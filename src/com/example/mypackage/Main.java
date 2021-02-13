@@ -5,6 +5,8 @@ import java.util.*;
 public class Main {
     public static String[] robotNames = {"Yellow", "Blue", "Pink", "Red","Green"};
     public static boolean quit = false;
+    public static Perudo perudo;
+    public static GUI perudoGUI;
 
     public static void main(String[] args) {
         try{
@@ -53,7 +55,7 @@ public class Main {
         }
     }
     public static void play() {
-        Perudo perudo = initializeGame();
+        initializeGame();
         while (perudo.isRunning()) {
             if (perudo.isfirstRound()) {
                 perudo.shuffleDice();
@@ -61,8 +63,12 @@ public class Main {
                     RobotPlayer robotPlayer = (RobotPlayer) perudo.getCurrentPlayer();
                     int[] newBet = robotPlayer.makeABet(perudo.getNumberOfDice());
                     perudo.makeABet(newBet);
+                    perudoGUI.updateUI(robotPlayer, newBet);
                 }
                 else{
+                    System.out.println("Choose\n" +
+                            "1 to make a bet\n" +
+                            "0 to quit");
                     int choice = getInt(0,1);
                     processUserSelection(perudo, choice);
                     System.out.println("Waiting for player input");
@@ -74,12 +80,19 @@ public class Main {
                     if(robotPlayer.decideToBet(perudo.getCurrentBet(),perudo.getNumberOfDice())){
                         int[] newBet = robotPlayer.makeABet(perudo.getCurrentBet());
                         perudo.makeABet(newBet);
+                        perudoGUI.updateUI(robotPlayer, newBet);
                     } else {
                         perudo.revealDice();
                     }
 
                 }
                 else {
+                    System.out.println("Choose:\n" +
+                        "\t1 to make a bet\n" +
+                        "\t2 to reveal the dice\n" +
+                        "\t0 to quit");
+                    int choice = getInt(0,2);
+                    processUserSelection(perudo, choice);
                     System.out.println("Waiting for player input");
                 }
             }
@@ -137,8 +150,8 @@ public class Main {
 //        }
 //    }
 
-    public static Perudo initializeGame(){
-        Perudo perudo = new Perudo();
+    public static void initializeGame(){
+        perudo = new Perudo();
         Player player = new Player("You");
         int playerNumber = 5;
         perudo.addPlayer(player);
@@ -149,8 +162,8 @@ public class Main {
         }
 //        Set current player
         perudo.setCurrentPlayer(new Random().nextInt(playerNumber));
-        perudo.setPlayerFrame();
-        return perudo;
+        perudoGUI = new GUI(perudo);
+        perudoGUI.setPlayerFrame();
     }
 
 //    public static Perudo initializeGame2(){

@@ -15,9 +15,11 @@ public class GUI implements ActionListener {
     private JPanel mainPanel = new JPanel();
     private JLabel[] playersPanel;
     private Perudo perudo;
+    private ArrayList<Player> players;
 
     public GUI(Perudo perudo) {
         this.perudo = perudo;
+        this.players = perudo.getPlayers();
         // the clickable button
         JButton button = new JButton("Enter");
         button.addActionListener(this);
@@ -48,9 +50,8 @@ public class GUI implements ActionListener {
 
     }
 
-    public void setPlayerFrame(ArrayList<Player> players) {
+    public void setPlayerFrame() {
         int playersNum = players.size();
-
         playersPanel = new JLabel[playersNum];
         for (int i = 0; i < playersNum; i++) {
             playersPanel[i] = new JLabel();
@@ -74,12 +75,13 @@ public class GUI implements ActionListener {
         int num = Integer.parseInt(textFieldNum.getText()) ;
         int val = Integer.parseInt(textFieldVal.getText());
         perudo.makeABet(new int[] {num, val});
+        updateUI(players.get(0), new int[] {num, val});
         System.out.println("num: "+ num + " val: "+ val);
 //        labelNum.setText("Number of clicks:  " + clicks);
     }
 
 
-    public void updateUI(Player player, int[] currentBet, ArrayList<Player> players){
+    public void updateUI(Player player, int[] currentBet){
         int i = players.indexOf(player);
         if (player instanceof RobotPlayer){
             playersPanel[i].setText(player.getName() + ": "+ player.getNumberOfDice() + " dice. Bet:"
@@ -94,3 +96,6 @@ public class GUI implements ActionListener {
 }
 
 
+//        players_panel[0].setText(players.get(0).getName() + ": "
+//                + Arrays.toString(players.get(0).getDiceValues())
+//                );
