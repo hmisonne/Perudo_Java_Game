@@ -130,8 +130,6 @@ public class GUI {
             labelWarning.setText("Please enter a number.");
             return false;
         }
-
-
     }
 
 
@@ -163,7 +161,10 @@ public class GUI {
     }
     public void robotBet(){
         RobotPlayer robotPlayer = (RobotPlayer) perudo.getCurrentPlayer();
-        int[] newBet = robotPlayer.makeABet(perudo.getNumberOfDice());
+        int[] newBet = perudo.isfirstRound()
+            ? robotPlayer.makeABet(perudo.getNumberOfDice())
+            : robotPlayer.makeABet(perudo.getCurrentBet());
+
         perudo.makeABet(newBet);
 //            Update UI with Bet Value
         showPlayersBet(robotPlayer, newBet);
