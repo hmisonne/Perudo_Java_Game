@@ -35,6 +35,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(newBetAction()){
+                    perudo.setCurrentPlayerToNextPlayer();
                     goToNextPlayer();
                 };
             }
@@ -171,21 +172,20 @@ public class GUI {
 
     }
     public void goToNextPlayer() {
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException interruptedException) {
-            interruptedException.printStackTrace();
-        }
-        perudo.setCurrentPlayerToNextPlayer();
-        if (perudo.getCurrentPlayer() instanceof RobotPlayer){
+        while (perudo.getCurrentPlayer() instanceof RobotPlayer){
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
+            }
             RobotPlayer robotPlayer = (RobotPlayer) perudo.getCurrentPlayer();
             if(robotPlayer.decideToBet(perudo.getCurrentBet(),perudo.getNumberOfDice())){
                 robotBet();
+                perudo.setCurrentPlayerToNextPlayer();
             } else {
                 showPlayersDice();
                 perudo.revealDice();
             }
-
         }
     }
 }
