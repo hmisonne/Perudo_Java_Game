@@ -179,7 +179,7 @@ public class GUI {
                 interruptedException.printStackTrace();
             }
             RobotPlayer robotPlayer = (RobotPlayer) perudo.getCurrentPlayer();
-            if(robotPlayer.decideToBet(perudo.getCurrentBet(),perudo.getNumberOfDice())){
+            if(perudo.isfirstRound() || robotPlayer.decideToBet(perudo.getCurrentBet(),perudo.getNumberOfDice())){
                 robotBet();
                 perudo.setCurrentPlayerToNextPlayer();
             } else {
