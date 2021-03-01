@@ -24,6 +24,7 @@ public class Main {
 
 
     public static void initializeGame(){
+//        Create a new Perudo instance and add players
         perudo = new Perudo();
         Player player = new Player("You");
         int playerNumber = 5;
@@ -35,8 +36,8 @@ public class Main {
         }
 //        Set current player
         perudo.setCurrentPlayer(new Random().nextInt(playerNumber));
+//        Create a new GUI instance with the current game's information
         perudoGUI = new GUI(perudo);
-        perudoGUI.setPlayerFrame();
     }
 
 }
