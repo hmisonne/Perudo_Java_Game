@@ -120,7 +120,7 @@ public class GUI {
             int val = Integer.parseInt(textFieldVal.getText());
             if(perudo.isfirstRound() || perudo.isNewBetHigher(num, val)){
                 perudo.makeABet(new int[] {num, val});
-                hidePlayersDice(players.get(0), new int[] {num, val});
+                showPlayersBet(players.get(0), new int[] {num, val});
                 labelWarning.setText("You made a new bet: "+num+ " "+ val+"'s");
                 return true;
             } else {
@@ -134,7 +134,7 @@ public class GUI {
     }
 
 
-    public void hidePlayersDice(Player player, int[] currentBet){
+    public void showPlayersBet(Player player, int[] currentBet){
         int i = players.indexOf(player);
         playersPanel[i].setText(player.getName() + ": "+ player.getNumberOfDice() + " dice. Bet:"
                 + Arrays.toString(currentBet));
@@ -168,7 +168,7 @@ public class GUI {
 
         perudo.makeABet(newBet);
 //            Update UI with Bet Value
-        hidePlayersDice(robotPlayer, newBet);
+        showPlayersBet(robotPlayer, newBet);
 
     }
     public void goToNextPlayer() {

@@ -64,7 +64,7 @@ public class Main {
                     RobotPlayer robotPlayer = (RobotPlayer) perudo.getCurrentPlayer();
                     int[] newBet = robotPlayer.makeABet(perudo.getNumberOfDice());
                     perudo.makeABet(newBet);
-                    perudoGUI.hidePlayersDice(robotPlayer, newBet);
+                    perudoGUI.showPlayersBet(robotPlayer, newBet);
                 }
                 else{
                     System.out.println("Choose\n" +
@@ -81,7 +81,7 @@ public class Main {
                     if(robotPlayer.decideToBet(perudo.getCurrentBet(),perudo.getNumberOfDice())){
                         int[] newBet = robotPlayer.makeABet(perudo.getCurrentBet());
                         perudo.makeABet(newBet);
-                        perudoGUI.hidePlayersDice(robotPlayer, newBet);
+                        perudoGUI.showPlayersBet(robotPlayer, newBet);
                     } else {
                         perudo.revealDice();
                         perudoGUI.showPlayersDice();
@@ -202,7 +202,7 @@ public class Main {
                 int dieValue = getInt(1,6);
                 int[] newBet = new int[]{numOfDice, dieValue};
                 perudo.makeABet(newBet);
-                perudoGUI.hidePlayersDice(perudo.getPlayers().get(0), newBet);
+                perudoGUI.showPlayersBet(perudo.getPlayers().get(0), newBet);
                 break;
             case 2:
                 perudo.revealDice();
