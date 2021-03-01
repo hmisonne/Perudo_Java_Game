@@ -2,6 +2,7 @@ package com.example.mypackage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 public class Perudo {
     private ArrayList<Player> players;
@@ -222,5 +223,22 @@ public class Perudo {
                 this.isRunning = false;
             }
         }
+    }
+
+    public boolean decideToBet(RobotPlayer robotPlayer){
+        if(this.isfirstRound()){
+            return true;
+        } else {
+            return robotPlayer.decideToBet(this.getCurrentBet(),this.getNumberOfDice());
+        }
+    }
+
+    public int[] robotBet(RobotPlayer robotPlayer){
+        int[] newBet = this.isfirstRound()
+                ? robotPlayer.makeABet(this.getNumberOfDice())
+                : robotPlayer.makeABet(this.getCurrentBet());
+
+        this.makeABet(newBet);
+        return newBet;
     }
 }
