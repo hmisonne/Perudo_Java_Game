@@ -86,6 +86,28 @@ public class GUI {
 
     }
 
+    public void goToNextPlayer() {
+        while (perudo.getCurrentPlayer() instanceof RobotPlayer){
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
+            }
+            RobotPlayer robotPlayer = (RobotPlayer) perudo.getCurrentPlayer();
+
+            if (perudo.decideToBet(robotPlayer)){
+                perudo.robotBet(robotPlayer);
+                showPlayersBet(robotPlayer, perudo.getCurrentBet());
+                perudo.setCurrentPlayerToNextPlayer();
+            }
+            else {
+                showPlayersDice();
+                perudo.revealDice();
+                return;
+            }
+        }
+    }
+
     public void setPlayerFrame() {
         int playersNum = players.size();
         playersPanel = new JLabel[playersNum];
@@ -154,38 +176,12 @@ public class GUI {
                 players.get(0).getDiceValues()));
     }
     public void startNewRound(){
+        System.out.println("New Round Started");
         perudo.shuffleDice();
         showDiceInHand();
         resetPlayerDice();
-        if (perudo.getCurrentPlayer() instanceof RobotPlayer) robotBet();
-
+        goToNextPlayer();
     }
-    public void robotBet(){
-        RobotPlayer robotPlayer = (RobotPlayer) perudo.getCurrentPlayer();
-        int[] newBet = perudo.isfirstRound()
-            ? robotPlayer.makeABet(perudo.getNumberOfDice())
-            : robotPlayer.makeABet(perudo.getCurrentBet());
 
-        perudo.makeABet(newBet);
-//            Update UI with Bet Value
-        showPlayersBet(robotPlayer, newBet);
 
-    }
-    public void goToNextPlayer() {
-        while (perudo.getCurrentPlayer() instanceof RobotPlayer){
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException interruptedException) {
-                interruptedException.printStackTrace();
-            }
-            RobotPlayer robotPlayer = (RobotPlayer) perudo.getCurrentPlayer();
-            if(perudo.isfirstRound() || robotPlayer.decideToBet(perudo.getCurrentBet(),perudo.getNumberOfDice())){
-                robotBet();
-                perudo.setCurrentPlayerToNextPlayer();
-            } else {
-                showPlayersDice();
-                perudo.revealDice();
-            }
-        }
-    }
 }
