@@ -159,7 +159,7 @@ public class Perudo {
 
     }
 
-    public void revealDice() {
+    public Player revealDice() {
         System.out.println(currentPlayer.getName()+ " wants to see the dice");
         boolean betIsCorrect = isCurrentBetCorrect();
         int looserIndex;
@@ -168,6 +168,7 @@ public class Perudo {
             looser = this.currentPlayer;
             System.out.println(getPreviousPlayer().getName() + " made a correct bet.");
             looserIndex = this.players.indexOf(looser);
+
         } else {
             looser = getPreviousPlayer();
             System.out.println(getPreviousPlayer().getName() + " was lying.");
@@ -182,6 +183,7 @@ public class Perudo {
 //        Reset Game
             this.isfirstRound = true;
         }
+        return looser;
     }
 
     public boolean isCurrentBetCorrect(){
