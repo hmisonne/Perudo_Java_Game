@@ -35,7 +35,8 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
                 if(newBetAction()){
                     perudo.setCurrentPlayerToNextPlayer();
-                    robotPlay();
+                    Thread queryThread = new Thread(() -> robotPlay());
+                    queryThread.start();
                 };
             }
         });
