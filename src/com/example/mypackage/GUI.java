@@ -44,7 +44,8 @@ public class GUI {
         newRoundButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                startNewRound();
+                Thread queryThread = new Thread(() -> startNewRound());
+                queryThread.start();
             }
         });
         revealDiceButton.addActionListener(new ActionListener() {
