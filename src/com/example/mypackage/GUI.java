@@ -15,6 +15,7 @@ public class GUI {
     private JLabel labelDiceInHand = new JLabel("Dice in hand: ");
     private JLabel textDiceInHand = new JLabel();
     private JLabel labelWarning = new JLabel();
+    private JLabel gameInfo = new JLabel();
     private JFrame frame = new JFrame();
     private JPanel mainPanel = new JPanel();
     private JLabel[] playersPanel;
@@ -75,8 +76,13 @@ public class GUI {
         mainPanel.setBackground(new Color(150,150,150));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
 
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
+        bottomPanel.setLayout(new GridLayout(0, 1));
+        bottomPanel.add(gameInfo);
         // set up the frame and display it
         frame.add(betPanel, BorderLayout.NORTH);
+        frame.add(bottomPanel, BorderLayout.SOUTH);
         frame.add(mainPanel);
         frame.setSize(800,800); // TODO
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -105,6 +111,7 @@ public class GUI {
 //          The main player will see his combination of dice and how many dice has each player
 //          A new round is started, iterating through each robot player.
         System.out.println("New Round Started");
+        gameInfo.setText("New Round Started");
         perudo.shuffleDice();
         showDiceInHand();
         resetPlayerDice();
@@ -117,7 +124,7 @@ public class GUI {
         while (perudo.getCurrentPlayer() instanceof RobotPlayer){
 //            Add wait time between robot actions
             try {
-                TimeUnit.SECONDS.sleep(1);
+                TimeUnit.SECONDS.sleep(2);
             } catch (InterruptedException interruptedException) {
                 interruptedException.printStackTrace();
             }
@@ -125,15 +132,20 @@ public class GUI {
             RobotPlayer robotPlayer = (RobotPlayer) perudo.getCurrentPlayer();
             if (perudo.decideToBet(robotPlayer)){
                 perudo.robotBet(robotPlayer);
-                showPlayersBet(robotPlayer, perudo.getCurrentBet());
+                int[] currentBet = perudo.getCurrentBet();
+                showPlayersBet(robotPlayer, currentBet);
+                gameInfo.setText(robotPlayer.getName() + " is betting "+ Arrays.toString(currentBet));
                 perudo.setCurrentPlayerToNextPlayer();
             }
             else {
                 showPlayersDice();
-                perudo.revealDice();
+                gameInfo.setText(robotPlayer.getName() + " wants to see the dice");
+                Player looser = perudo.revealDice();
+                gameInfo.setText(looser.getName() + " is loosing a die.");
                 return;
             }
         }
+        gameInfo.setText("It's your turn");
     }
 
 
