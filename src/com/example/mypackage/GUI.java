@@ -16,6 +16,7 @@ public class GUI {
     private JLabel textDiceInHand = new JLabel();
     private JLabel labelWarning = new JLabel();
     private JLabel gameInfo = new JLabel();
+    private JLabel gameResult = new JLabel();
     private JFrame frame = new JFrame();
     private JPanel mainPanel = new JPanel();
     private JLabel[] playersPanel;
@@ -53,7 +54,12 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 revealPlayersDice();
-                perudo.revealDice();
+                Player looser = perudo.revealDice();
+                if (looser instanceof RobotPlayer){
+                    gameInfo.setText(looser.getName() + " is loosing a die.");
+                } else {
+                    gameInfo.setText("You are loosing a die.");
+                }
             }
         });
 
@@ -80,6 +86,7 @@ public class GUI {
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
         bottomPanel.setLayout(new GridLayout(0, 1));
         bottomPanel.add(gameInfo);
+        bottomPanel.add(gameResult);
         // set up the frame and display it
         frame.add(betPanel, BorderLayout.NORTH);
         frame.add(bottomPanel, BorderLayout.SOUTH);
@@ -141,7 +148,11 @@ public class GUI {
                 showPlayersDice();
                 gameInfo.setText(robotPlayer.getName() + " wants to see the dice");
                 Player looser = perudo.revealDice();
-                gameInfo.setText(looser.getName() + " is loosing a die.");
+                if (looser instanceof RobotPlayer){
+                    gameInfo.setText(looser.getName() + " is loosing a die.");
+                } else {
+                    gameInfo.setText("You are loosing a die.");
+                }
                 return;
             }
         }
