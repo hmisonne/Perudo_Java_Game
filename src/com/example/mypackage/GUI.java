@@ -55,11 +55,7 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
                 revealPlayersDice();
                 Player looser = perudo.revealDice();
-                if (looser instanceof RobotPlayer){
-                    gameInfo.setText(looser.getName() + " is loosing a die.");
-                } else {
-                    gameInfo.setText("You are loosing a die.");
-                }
+                displayRoundResult(looser);
             }
         });
 
@@ -117,8 +113,8 @@ public class GUI {
 //          All players shuffle their dice,
 //          The main player will see his combination of dice and how many dice has each player
 //          A new round is started, iterating through each robot player.
-        System.out.println("New Round Started");
         gameInfo.setText("New Round Started");
+        gameResult.setText("");
         perudo.shuffleDice();
         showDiceInHand();
         resetPlayerDice();
@@ -148,11 +144,8 @@ public class GUI {
                 showPlayersDice();
                 gameInfo.setText(robotPlayer.getName() + " wants to see the dice");
                 Player looser = perudo.revealDice();
-                if (looser instanceof RobotPlayer){
-                    gameInfo.setText(looser.getName() + " is loosing a die.");
-                } else {
-                    gameInfo.setText("You are loosing a die.");
-                }
+                displayRoundResult(looser);
+
                 return;
             }
         }
@@ -168,6 +161,20 @@ public class GUI {
             playersPanel[i].setText(player.getName() + ": " + player.getNumberOfDice() + " dice\n");
         }
 
+    }
+
+    public void displayRoundResult(Player looser){
+//        Update the UI to display the result of the round.
+        gameResult.setText("There is a total of: "
+                + perudo.getNumOfDiceResult()
+                + " "
+                + perudo.getCurrentBet()[1] + "'s");
+
+        if (looser instanceof RobotPlayer){
+            gameInfo.setText(looser.getName() + " is loosing a die.");
+        } else {
+            gameInfo.setText("You are loosing a die.");
+        }
     }
     public void revealPlayersDice() {
 //        Update the UI to display the dice per player
