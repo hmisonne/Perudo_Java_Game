@@ -11,7 +11,7 @@ public class Perudo {
     private boolean isfirstRound;
     private boolean isRunning;
     private boolean higherBetIsRequired;
-
+    private int numOfDiceResult;
 
     public Perudo() {
         this.players = new ArrayList<>();
@@ -19,6 +19,13 @@ public class Perudo {
         this.isRunning = true;
     }
 
+    public int getNumOfDiceResult() {
+        return numOfDiceResult;
+    }
+
+    public void setNumOfDiceResult(int numOfDiceResult) {
+        this.numOfDiceResult = numOfDiceResult;
+    }
 
     public int[] getCurrentBet() {
         return currentBet;
@@ -161,6 +168,7 @@ public class Perudo {
 
     public Player revealDice() {
         System.out.println(currentPlayer.getName()+ " wants to see the dice");
+        calculateActualNumberOfDie();
         boolean betIsCorrect = isCurrentBetCorrect();
         int looserIndex;
         Player looser;
@@ -186,12 +194,8 @@ public class Perudo {
         return looser;
     }
 
-    public boolean isCurrentBetCorrect(){
-//        Get Bet information
-        int numOfDiceBet = currentBet[0];
+    public void calculateActualNumberOfDie(){
         int dieValue = currentBet[1];
-        System.out.println("The current bet was for: "+ numOfDiceBet +" "+ dieValue);
-//        Compare Bet with actual results
         int numOfDiceResult = 0;
         for(Player player: players){
             int[] diceValues = player.getDiceValues();
@@ -207,7 +211,15 @@ public class Perudo {
             }
 
         }
+        setNumOfDiceResult(numOfDiceResult);
+    }
+    public boolean isCurrentBetCorrect(){
+//        Get Bet information
+        int numOfDiceBet = currentBet[0];
+        int dieValue = currentBet[1];
+        System.out.println("The current bet was for: "+ numOfDiceBet +" "+ dieValue);
 
+//        Compare Bet with actual results
         System.out.println("There was: "+numOfDiceResult +" dice with a value of "+ dieValue + " (including Pacos)");
         return numOfDiceResult >= numOfDiceBet;
     }
