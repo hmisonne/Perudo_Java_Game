@@ -105,6 +105,16 @@ class PerudoTest {
     }
 
     @Test
+    void calculateActualNumberOfDie() {
+        perudo.shuffleDice();
+        perudo.setCurrentPlayer(0);
+        int[] newBet = {3,4};
+        perudo.makeABet(newBet);
+        int numOfDiceResult = perudo.getNumOfDiceResult();
+        assertTrue(numOfDiceResult >=0 && numOfDiceResult <= perudo.getNumberOfDice());
+    }
+
+    @Test
     void isCurrentBetCorrect_true() {
 //        Check if player made a correct Bet
 //        Initialize round with shuffling dice, setting currentPlayer, and setting a correct bet.
@@ -168,7 +178,4 @@ class PerudoTest {
 //        If there is only 2 players, and looser has only one die left, end of the game
     }
 
-    @Test
-    void isBetValid() {
-    }
 }
