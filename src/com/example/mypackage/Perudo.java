@@ -2,10 +2,9 @@ package com.example.mypackage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
 
 public class Perudo {
-    private ArrayList<Player> players;
+    private final ArrayList<Player> players;
     private int[] currentBet;
     private Player currentPlayer;
     private boolean isfirstRound;
@@ -117,8 +116,8 @@ public class Perudo {
             return false;
         }
 //        Not Betting Pacos
+        int minNumOfDiceToBet = currentNumOfDice;
         if (newBetDieValue > 1){
-            int minNumOfDiceToBet = currentNumOfDice;
             if(currentDieValue == 1){
                 minNumOfDiceToBet *= 2;
                 minNumOfDiceToBet ++;
@@ -136,7 +135,6 @@ public class Perudo {
             }
         } else {
 //            Betting Pacos
-            int minNumOfDiceToBet = currentNumOfDice;
             if(currentDieValue != 1){
                 minNumOfDiceToBet = currentNumOfDice / 2;
                 if (currentNumOfDice % 2 != 0){
@@ -175,13 +173,12 @@ public class Perudo {
         if(betIsCorrect){
             looser = this.currentPlayer;
             System.out.println(getPreviousPlayer().getName() + " made a correct bet.");
-            looserIndex = this.players.indexOf(looser);
 
         } else {
             looser = getPreviousPlayer();
             System.out.println(getPreviousPlayer().getName() + " was lying.");
-            looserIndex = this.players.indexOf(looser);
         }
+        looserIndex = this.players.indexOf(looser);
         this.removeADie(looser);
         if (this.isRunning){
             if (looserIndex == this.players.size()){
@@ -247,12 +244,11 @@ public class Perudo {
         }
     }
 
-    public int[] robotBet(RobotPlayer robotPlayer){
+    public void robotBet(RobotPlayer robotPlayer){
         int[] newBet = this.isfirstRound()
                 ? robotPlayer.makeABet(this.getNumberOfDice())
                 : robotPlayer.makeABet(this.getCurrentBet());
 
         this.makeABet(newBet);
-        return newBet;
     }
 }
