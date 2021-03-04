@@ -113,6 +113,7 @@ class PerudoTest {
         Player player = perudo.getCurrentPlayer();
         int[] diceInHand = player.getDiceValues();
         perudo.makeABet(new int[] {1,diceInHand[0]});
+        perudo.calculateActualNumberOfDie();
         assertTrue(perudo.isCurrentBetCorrect());
     }
     @Test
@@ -122,6 +123,7 @@ class PerudoTest {
         perudo.shuffleDice();
         perudo.setCurrentPlayer(1);
         perudo.makeABet(new int[] {26,6});
+        perudo.calculateActualNumberOfDie();
         assertFalse(perudo.isCurrentBetCorrect());
     }
 
