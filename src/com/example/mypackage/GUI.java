@@ -31,7 +31,7 @@ public class GUI extends JFrame {
     private JFrame frame = new JFrame();
     private JPanel mainPanel = new JPanel();
     private JPanel[] playersPanel;
-
+    private JLabel[] playersPanelBetInfo;
 
 
     public GUI(Perudo perudo) {
@@ -111,8 +111,11 @@ public class GUI extends JFrame {
 //        Update the UI main panel with player's information
         int playersNum = players.size();
         playersPanel = new JPanel[playersNum];
+        playersPanelBetInfo = new JLabel[playersNum];
         for (int i = 0; i < playersNum; i++) {
-            playersPanel[i] = new JPanel();
+            playersPanel[i] = new JPanel(new BorderLayout());
+            playersPanelBetInfo[i] = new JLabel();
+            playersPanel[i].add(playersPanelBetInfo[i], BorderLayout.NORTH);
             playersPanel[i].setBackground(new Color(150,150,150));
             mainPanel.add(playersPanel[i]);
         }
@@ -155,6 +158,8 @@ public class GUI extends JFrame {
             }
             else {
                 revealPlayersDice();
+                int index = perudo.getPlayers().indexOf(robotPlayer);
+                playersPanelBetInfo[index].setText(robotPlayer.getName() + ": " + robotPlayer.getNumberOfDice() + " dice - Wants to see the dice");
                 gameInfo.setText(robotPlayer.getName() + " wants to see the dice");
                 Player looser = perudo.revealDice();
                 displayRoundResult(looser);
@@ -174,7 +179,8 @@ public class GUI extends JFrame {
             playersPanel[i].removeAll();
             playersPanel[i].revalidate();
             playersPanel[i].repaint();
-            playersPanel[i].add(new JLabel(player.getName() + ": " + player.getNumberOfDice() + " dice"));
+            playersPanelBetInfo[i].setText(player.getName() + ": " + player.getNumberOfDice() + " dice");
+            playersPanel[i].add(playersPanelBetInfo[i], BorderLayout.NORTH);
         }
 
     }
@@ -199,9 +205,12 @@ public class GUI extends JFrame {
             Player player = players.get(i);
             int[] diceValues = player.getDiceValues();
 //
+            JPanel myPanel = new JPanel();
+            myPanel.setBackground(new Color(150,150,150));
+            playersPanel[i].add(myPanel, BorderLayout.CENTER);
             for (int j = 0; j < diceValues.length; j++) {
                 String diceValue = "pic/dice"+diceValues[j]+".png";
-                playersPanel[i].add(new JLabel(new ImageIcon(diceValue)));
+                myPanel.add(new JLabel(new ImageIcon(diceValue)));
             }
 
         }
@@ -231,7 +240,7 @@ public class GUI extends JFrame {
     public void showPlayersBet(Player player, int[] currentBet){
 //        Update the UI with player's bet
         int i = players.indexOf(player);
-        playersPanel[i].add(new JLabel("- Bet:" + Arrays.toString(currentBet)));
+        playersPanelBetInfo[i].setText(player.getName() + ": " + player.getNumberOfDice() + " dice"+" - Bet: " + Arrays.toString(currentBet));
     }
 
     public void showDiceInHand(){
@@ -239,7 +248,5 @@ public class GUI extends JFrame {
         textDiceInHand.setText(Arrays.toString(
                 players.get(0).getDiceValues()));
     }
-
-
 
 }
