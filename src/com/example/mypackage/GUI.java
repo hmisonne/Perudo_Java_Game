@@ -174,6 +174,7 @@ public class GUI extends JFrame {
     public void resetPlayerDice() {
 //        Update the UI with the number of dice per player
         int playersNum = players.size();
+        int[] playerDiceValues = players.get(0).getDiceValues();
         for (int i = 0; i < playersNum; i++) {
             Player player = players.get(i);
             playersPanel[i].removeAll();
@@ -181,6 +182,19 @@ public class GUI extends JFrame {
             playersPanel[i].repaint();
             playersPanelBetInfo[i].setText(player.getName() + ": " + player.getNumberOfDice() + " dice");
             playersPanel[i].add(playersPanelBetInfo[i], BorderLayout.NORTH);
+
+            JPanel myPanel = new JPanel();
+            myPanel.setBackground(new Color(150,150,150));
+            playersPanel[i].add(myPanel, BorderLayout.CENTER);
+            for (int j = 0; j < player.getNumberOfDice(); j++) {
+                String diceValue;
+                if(player instanceof RobotPlayer){
+                    diceValue = "pic/diceBlank.png";
+                } else {
+                    diceValue = "pic/dice"+playerDiceValues[j]+".png";
+                }
+                myPanel.add(new JLabel(new ImageIcon(diceValue)));
+            }
         }
 
     }
