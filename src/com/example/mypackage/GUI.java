@@ -11,6 +11,7 @@ public class GUI extends JFrame {
 //    Reference to perudo game instance and list of players
     private Perudo perudo;
     private ArrayList<Player> players;
+    private boolean playerRemoved = false;
 //    Information on top
     private JLabel labelNum = new JLabel("Number of dice: ");
     private JTextField textFieldNum = new JTextField();
@@ -170,16 +171,23 @@ public class GUI extends JFrame {
         gameInfo.setText("It's your turn");
     }
 
+    public void clearPlayerPanel(int i){
+        playersPanel[i].removeAll();
+        playersPanel[i].revalidate();
+        playersPanel[i].repaint();
+    }
 
     public void resetPlayerDice() {
 //        Update the UI with the number of dice per player
         int playersNum = players.size();
         int[] playerDiceValues = players.get(0).getDiceValues();
+        if (playerRemoved){
+            clearPlayerPanel(players.size());
+            playerRemoved = false;
+        }
         for (int i = 0; i < playersNum; i++) {
             Player player = players.get(i);
-            playersPanel[i].removeAll();
-            playersPanel[i].revalidate();
-            playersPanel[i].repaint();
+            clearPlayerPanel(i);
             playersPanelBetInfo[i].setText(player.getName() + ": " + player.getNumberOfDice() + " dice");
             playersPanel[i].add(playersPanelBetInfo[i], BorderLayout.NORTH);
 
@@ -210,6 +218,10 @@ public class GUI extends JFrame {
             gameInfo.setText(looser.getName() + " is loosing a die.");
         } else {
             gameInfo.setText("You are loosing a die.");
+        }
+        //        Check if looser is still in the game
+        if (perudo.getPlayers().indexOf(looser) == -1){
+            playerRemoved = true;
         }
     }
     public void revealPlayersDice() {
