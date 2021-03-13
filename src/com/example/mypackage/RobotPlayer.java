@@ -37,7 +37,7 @@ public class RobotPlayer extends Player{
     public int[] makeABet(int numberOfDice){
 //            The die's value will be between 2 and 6 (random number between 0 and 4, +2)
         int dieValue = new Random().nextInt(5)+2;
-        if (numberOfDice > 3){
+        if (numberOfDice >= 6){
             return new int[] {(numberOfDice/3)-1, dieValue};
         } else {
             return new int[] {1, dieValue};
