@@ -1,46 +1,48 @@
 package com.example.mypackage;
 
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Player{
     private final String name;
-    private int[] diceValues;
+    private ArrayList<Dice> cupOfDice;
 
     public Player(String name) {
-        this.diceValues = new int[5];
+        this.cupOfDice = new ArrayList<>(5);
         this.name = name;
+
+        for(int i= 0; i< 5; i ++){
+            cupOfDice.add(new Dice());
+        }
     }
 
     public String getName() {
         return name;
     }
 
-    public int[] getDiceValues() {
-        return diceValues;
+    public ArrayList<Dice> getDiceValues() {
+        return cupOfDice;
     }
 
     public int getNumberOfDice() {
-        return diceValues.length;
+        return cupOfDice.size();
     }
 
 
     public void shuffleDice(){
-        Random rand = new Random();
-        int numOfDice = diceValues.length ;
-        for(int i = 0 ; i < numOfDice; i++){
-            diceValues[i] = rand.nextInt(6)+1;
+        for(Dice die: cupOfDice){
+            die.shuffle();
         }
-//        System.out.println(name+ " now has: "+ Arrays.toString(diceValues));
     }
 
     public void looseADie(){
-        if(diceValues.length < 1){
+        if(cupOfDice.size() < 1){
             System.out.println("not valid");
         }
         else {
             System.out.println(this.name + " is loosing a die");
-            this.diceValues = new int[diceValues.length -1];
+            this.cupOfDice.remove(0);
         }
     }
 

@@ -195,14 +195,15 @@ public class Perudo {
         int dieValue = currentBet[1];
         int numOfDiceResult = 0;
         for(Player player: players){
-            int[] diceValues = player.getDiceValues();
-            System.out.println(player.getName()+ " had: "+ Arrays.toString(diceValues));
-            for (int die : diceValues){
-                if (die == dieValue){
+            ArrayList<Dice> diceValues = player.getDiceValues();
+//            TODO
+            System.out.println(player.getName()+ " had: "+ diceValues.toString());
+            for (Dice die : diceValues){
+                if (die.getValue() == dieValue){
                     numOfDiceResult ++;
                 }
 //                Adding Pacos, if the value bet is not a Paco
-                if(dieValue != 1 && die ==1){
+                if(dieValue != 1 && die.getValue() ==1){
                     numOfDiceResult ++;
                 }
             }

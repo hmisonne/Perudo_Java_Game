@@ -98,8 +98,8 @@ class PerudoTest {
         perudo.shuffleDice();
         ArrayList<Player> players = perudo.getPlayers();
         for (Player player : players){
-            for(int die : player.getDiceValues()){
-                assertTrue(die >= 1 && die <= 6);
+            for(Dice die : player.getDiceValues()){
+                assertTrue(die.getValue() >= 1 && die.getValue() <= 6);
             }
         }
     }
@@ -121,8 +121,8 @@ class PerudoTest {
         perudo.shuffleDice();
         perudo.setCurrentPlayer(1);
         Player player = perudo.getCurrentPlayer();
-        int[] diceInHand = player.getDiceValues();
-        perudo.makeABet(new int[] {1,diceInHand[0]});
+        ArrayList<Dice> diceInHand = player.getDiceValues();
+        perudo.makeABet(new int[] {1,diceInHand.get(0).getValue()});
         perudo.calculateActualNumberOfDie();
         assertTrue(perudo.isCurrentBetCorrect());
     }

@@ -180,7 +180,6 @@ public class GUI extends JFrame {
     public void resetPlayerDice() {
 //        Update the UI with the number of dice per player
         int playersNum = players.size();
-        int[] playerDiceValues = players.get(0).getDiceValues();
         if (playerRemoved){
             clearPlayerPanel(players.size());
             playerRemoved = false;
@@ -194,12 +193,13 @@ public class GUI extends JFrame {
             JPanel myPanel = new JPanel();
             myPanel.setBackground(new Color(150,150,150));
             playersPanel[i].add(myPanel, BorderLayout.CENTER);
-            for (int j = 0; j < player.getNumberOfDice(); j++) {
+            ArrayList<Dice> diceValues = player.getDiceValues();
+            for (Dice die: diceValues) {
                 String diceValue;
                 if(player instanceof RobotPlayer){
                     diceValue = "pic/diceBlank.png";
                 } else {
-                    diceValue = "pic/dice"+playerDiceValues[j]+".png";
+                    diceValue = "pic/dice"+die.getValue()+".png";
                 }
                 myPanel.add(new JLabel(new ImageIcon(diceValue)));
             }
@@ -229,13 +229,13 @@ public class GUI extends JFrame {
         int playersNum = players.size();
         for (int i = 0; i < playersNum; i++) {
             Player player = players.get(i);
-            int[] diceValues = player.getDiceValues();
+            ArrayList<Dice> diceValues = player.getDiceValues();
 //
             JPanel myPanel = new JPanel();
             myPanel.setBackground(new Color(150,150,150));
             playersPanel[i].add(myPanel, BorderLayout.CENTER);
-            for (int j = 0; j < diceValues.length; j++) {
-                String diceValue = "pic/dice"+diceValues[j]+".png";
+            for (Dice die: diceValues) {
+                String diceValue = "pic/dice"+die.getValue()+".png";
                 myPanel.add(new JLabel(new ImageIcon(diceValue)));
             }
 
@@ -271,8 +271,9 @@ public class GUI extends JFrame {
 
     public void showDiceInHand(){
 //        Update the UI with the set of dice the player has.
-        textDiceInHand.setText(Arrays.toString(
-                players.get(0).getDiceValues()));
+        ArrayList<Dice> playerDiceValues = players.get(0).getDiceValues();
+//        TODO
+        textDiceInHand.setText(playerDiceValues.toString());
     }
 
 }

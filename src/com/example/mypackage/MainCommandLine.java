@@ -68,7 +68,7 @@ public class MainCommandLine {
                     perudo.makeABet(newBet);
                 }
                 else{
-                    System.out.println("You currently have: "+ Arrays.toString(perudo.getCurrentPlayer().getDiceValues()));
+                    System.out.println("You currently have: "+ perudo.getCurrentPlayer().getDiceValues().toString());
                     System.out.println("Choose\n" +
                             "1 to make a bet\n" +
                             "0 to quit");
@@ -94,7 +94,7 @@ public class MainCommandLine {
 
                 }
                 else {
-                    System.out.println("You currently have: "+ Arrays.toString(perudo.getCurrentPlayer().getDiceValues()));
+                    System.out.println("You currently have: "+ perudo.getCurrentPlayer().getDiceValues().toString());
                     System.out.println("Choose:\n" +
                             "\t1 to make a bet\n" +
                             "\t2 to reveal the dice\n" +
