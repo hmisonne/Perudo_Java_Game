@@ -16,11 +16,15 @@ The winner is the last remaining player !
 
 ## Project Structure Overview
 
-To build this Perudo game, I created 4 classes. Here is the non-exhaustive description of each class.
+To build this Perudo game, I created 5 classes. Here is the non-exhaustive description of each class.
+
+A **Dice** Class which holds:
+- `int value`: an integer value from 1 to 6; 
+- Methods to retrieve the value and generate a new random integer between 1 and 6.
 
 A **Player** Class which holds:
 - `String name`: the name of each player
-- `int[] diceValues`: An array of 5 integers with a random value from 1 to 6, representing dice values'. For example:`[1,2,6,6,4]`
+- `ArrayList<Dice>`: An array of 5 Dice with a random value from 1 to 6, representing dice values'. For example:`[1,2,6,6,4]`
 - Methods to get the diceValues, shuffleDice, looseADie.  
 
 A **RobotPlayer** Class which inherits from the **Player** Class and holds:
